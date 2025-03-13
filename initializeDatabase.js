@@ -33,14 +33,13 @@ function createTables() {
     
     CREATE TABLE IF NOT EXISTS "todo_list" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-        "owner_email" TEXT NOT NULL,
-        "name" TEXT NOT NULL,
-        FOREIGN KEY("owner_email") REFERENCES "user"("email") ON DELETE CASCADE
+        "name" TEXT NOT NULL
     );
     
     CREATE TABLE IF NOT EXISTS "has_access" (
         "user_email" TEXT NOT NULL,
         "todo_list_id" INTEGER NOT NULL,
+        "has_right" INTEGER NOT NULL CHECK("has_right" IN (0,1)),
         FOREIGN KEY("user_email") REFERENCES "user"("email") ON DELETE CASCADE,
         FOREIGN KEY("todo_list_id") REFERENCES "todo_list"("id") ON DELETE CASCADE
     );
@@ -51,10 +50,12 @@ function createTables() {
     CREATE TABLE IF NOT EXISTS "list_item" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "name" TEXT NOT NULL,
-        "is_done" INTEGER NOT NULL CHECK("is_done" IN (0,1)), 
         "end_date" DATE NOT NULL,
         "list_id" INTEGER NOT NULL,
-        FOREIGN KEY("list_id") REFERENCES "todo_list"("id") ON DELETE CASCADE
+        "index" INTEGER NOT NULL,
+        "completed_by" TEXT NULL,
+        FOREIGN KEY("list_id") REFERENCES "todo_list"("id") ON DELETE CASCADE,
+        FOREIGN KEY("completed_by") REFERENCES "user"("email") ON DELETE CASCADE
     );`,
         (err) => {
             if (err) {
@@ -66,5 +67,4 @@ function createTables() {
     );
 }
 
-// Exporter l'instance de la base de données
 module.exports = db;

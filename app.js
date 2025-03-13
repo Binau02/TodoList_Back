@@ -9,11 +9,14 @@ const http = require('http');
 const cors = require('cors');
 const bodyParser = require("body-parser");
 const dotenv = require('dotenv');
+const {verifyToken} = require("./middleware/authMiddleware");
 
 // Initialisation de la base de données
 require('./initializeDatabase');
 
 const authRouter = require('./route/auth.js');
+const userRouter = require('./route/user.js');
+const listRouter = require('./route/list.js');
 
 const app = express();
 const port = 3000;
@@ -36,6 +39,8 @@ app.use(session({
 
 
 app.use('/auth', authRouter);
+app.use('/users', verifyToken, userRouter);
+app.use('/lists', verifyToken, listRouter);
 
 // messages
 const server = http.createServer(app);
