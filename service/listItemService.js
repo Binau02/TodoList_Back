@@ -50,7 +50,31 @@ async function createListItem(name, end_date, list_id, position) {
     });
 }
 
+
+/**
+ * Update an item.
+ *
+ * @param item_id the task id
+ * @param completed_by user email of the person who completed the task
+ * @param position order index
+ */
+async function updateListItem(item_id, completed_by, position) {
+    return new Promise((resolve, reject) => {
+        db.run("UPDATE list_item SET (completed_by, position) = (?, ?) WHERE id = ?", [completed_by ?? null, position, item_id], function (err) {
+            if (err) {
+                console.error("Error updating list_item:", err.message);
+                reject(err);
+                return;
+            }
+            console.log("list_item updated successfully!");
+
+            resolve();
+        });
+    });
+}
+
 module.exports = {
     getAllItemsOfList,
     createListItem,
+    updateListItem,
 }; 

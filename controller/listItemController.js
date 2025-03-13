@@ -23,7 +23,7 @@ async function getAllItemsOfList(req, res) {
 }
 
 /**
- * Create item in the list. Send http status `201` if list creation is successful, `400`on bad request or `500` on internal server error.
+ * Create item in the list. Send http status `201` if item creation is successful, `400`on bad request or `500` on internal server error.
  *
  * @param req
  * @param res
@@ -51,9 +51,33 @@ async function createListItem(req, res) {
     }
 }
 
+/**
+ * Update item. Send http status `201` if item update is successful, `400`on bad request or `500` on internal server error.
+ *
+ * @param req
+ * @param res
+ */
+async function updateListItem(req, res) {
+    try {
+        const {completed_by, position, item_id} = req.body;
+
+        if (!position || !item_id) {
+            return res.status(400).json({error: 'Bad request'});
+        }
+
+        await listItemService.updateListItem(item_id, completed_by, position);
+
+        res.status(201).json(true);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
 
 module.exports = {
     getAllItemsOfList,
     createListItem,
+    updateListItem
 };
 
