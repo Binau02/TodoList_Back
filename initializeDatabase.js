@@ -52,7 +52,7 @@ function createTables() {
         "name" TEXT NOT NULL,
         "end_date" DATE NOT NULL,
         "list_id" INTEGER NOT NULL,
-        "index" INTEGER NOT NULL,
+        "position" INTEGER NOT NULL,
         "completed_by" TEXT NULL,
         FOREIGN KEY("list_id") REFERENCES "todo_list"("id") ON DELETE CASCADE,
         FOREIGN KEY("completed_by") REFERENCES "user"("email") ON DELETE CASCADE

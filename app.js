@@ -17,6 +17,7 @@ require('./initializeDatabase');
 const authRouter = require('./route/auth.js');
 const userRouter = require('./route/user.js');
 const listRouter = require('./route/list.js');
+const listItemRouter = require('./route/list_item.js');
 
 const app = express();
 const port = 3000;
@@ -41,6 +42,7 @@ app.use(session({
 app.use('/auth', authRouter);
 app.use('/users', verifyToken, userRouter);
 app.use('/lists', verifyToken, listRouter);
+app.use('/list', verifyToken, listItemRouter);
 
 // messages
 const server = http.createServer(app);
