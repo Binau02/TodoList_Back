@@ -59,13 +59,13 @@ async function createListItem(req, res) {
  */
 async function updateListItem(req, res) {
     try {
-        const {completed_by, position, item_id} = req.body;
+        const {completed_by, position, item_id, name} = req.body;
 
-        if (!position || !item_id) {
+        if (!position || !item_id || !name) {
             return res.status(400).json({error: 'Bad request'});
         }
 
-        await listItemService.updateListItem(item_id, completed_by, position);
+        await listItemService.updateListItem(item_id, completed_by, position, name);
 
         res.status(201).json(true);
     } catch (error) {
