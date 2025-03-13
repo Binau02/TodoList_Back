@@ -1,34 +1,29 @@
 const sqlite3 = require('sqlite3');
 const dbName = './data/todo.db';
 
-function initializeDatabase(callback) {
-    let db = new sqlite3.Database(dbName, sqlite3.OPEN_READWRITE, (err) => {
-        if (err && err.code === "SQLITE_CANTOPEN") {
-            createDatabase(callback);
-        } else if (err) {
-            console.error("Getting error: " + err);
-            callback(err);
-        } else {
-            console.log("Database connected successfully.");
-            callback(null, db);
-        }
-    });
-}
+let db = new sqlite3.Database(dbName, sqlite3.OPEN_READWRITE, (err) => {
+    if (err && err.code === "SQLITE_CANTOPEN") {
+        createDatabase();
+    } else if (err) {
+        console.error("Database connection error:", err);
+    } else {
+        console.log("Database connected successfully.");
+    }
+});
 
-function createDatabase(callback) {
-    const todoDb = new sqlite3.Database(dbName, (err) => {
+function createDatabase() {
+    db = new sqlite3.Database(dbName, (err) => {
         if (err) {
-            console.error("Getting error: " + err);
-            callback(err);
+            console.error("Error creating database:", err);
             return;
         }
         console.log("Database created.");
-        createTables(todoDb, callback);
+        createTables();
     });
 }
 
-function createTables(todoDb, callback) {
-    todoDb.exec(`
+function createTables() {
+    db.exec(`
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS "user" (
@@ -64,13 +59,12 @@ function createTables(todoDb, callback) {
         (err) => {
             if (err) {
                 console.error("Error creating tables:", err);
-                callback(err);
-                return;
+            } else {
+                console.log("Tables created successfully.");
             }
-            console.log("Tables created successfully.");
-            callback(null, todoDb);
         }
     );
 }
 
-module.exports = initializeDatabase;
+// Exporter l'instance de la base de données
+module.exports = db;
