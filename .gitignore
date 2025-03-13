@@ -7,4 +7,4 @@ images/*
 .idea/
 .vscode/
 
-data/
+todo.bd
