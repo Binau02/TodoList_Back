@@ -37,7 +37,7 @@ function getAllListsOfUser(email) {
 function getAllUsersOfList(id) {
     return new Promise((resolve, reject) => {
         db.all(`
-            SELECT h.user_email,
+            SELECT h.user_email as email,
                    h.has_right
             FROM todo_list l
                      INNER JOIN has_access h ON l.id = h.todo_list_id

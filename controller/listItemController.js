@@ -84,7 +84,7 @@ async function updateListItem(req, res) {
     try {
         const {completed_by, position, id: item_id, name} = req.body;
 
-        if (!position || !item_id || !name) {
+        if (!item_id || !name) {
             return res.status(400).json({error: 'Bad request'});
         }
 
