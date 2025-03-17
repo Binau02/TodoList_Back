@@ -9,8 +9,8 @@ const db = require('../initializeDatabase');
 function getAllListsOfUser(email) {
     return new Promise((resolve, reject) => {
         db.all(`
-            SELECT l.id   AS list_id,
-                   l.name AS list_name,
+            SELECT l.id,
+                   l.name,
                    h.user_email,
                    h.has_right
             FROM has_access h
@@ -22,6 +22,32 @@ function getAllListsOfUser(email) {
                 reject(err);
             } else {
                 console.log("getAllListsOfUser executed successfully.", rows);
+                resolve(rows);
+            }
+        });
+    });
+}
+
+/**
+ * Get all users that have access to the selected list
+ *
+ * @param id the list id
+ * @returns all users that have access to list
+ */
+function getAllUsersOfList(id) {
+    return new Promise((resolve, reject) => {
+        db.all(`
+            SELECT h.user_email,
+                   h.has_right
+            FROM todo_list l
+                     INNER JOIN has_access h ON l.id = h.todo_list_id
+            WHERE l.id = ?
+        `, [id], (err, rows) => {
+            if (err) {
+                console.error("Error fetching list of users:", err.message);
+                reject(err);
+            } else {
+                console.log("getAllUsersOfList executed successfully.", rows);
                 resolve(rows);
             }
         });
@@ -149,4 +175,5 @@ module.exports = {
     grantAccessToList,
     getListById,
     updateList,
+    getAllUsersOfList,
 }; 

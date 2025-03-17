@@ -57,7 +57,7 @@ async function createListItem(req, res) {
         const {name, end_date, position} = req.body;
         const {list_id} = req.params;
 
-        if (!name || !end_date || !position || !list_id) {
+        if (!name || !end_date || !list_id) {
             return res.status(400).json({error: 'Bad request'});
         }
 
@@ -82,7 +82,7 @@ async function createListItem(req, res) {
  */
 async function updateListItem(req, res) {
     try {
-        const {completed_by, position, item_id, name} = req.body;
+        const {completed_by, position, id: item_id, name} = req.body;
 
         if (!position || !item_id || !name) {
             return res.status(400).json({error: 'Bad request'});
