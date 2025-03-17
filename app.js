@@ -18,6 +18,7 @@ const authRouter = require('./route/auth.js');
 const userRouter = require('./route/user.js');
 const listRouter = require('./route/list.js');
 const listItemRouter = require('./route/list_item.js');
+const { getAllItemsOfList, updateListItem } = require('./service/listItemService.js');
 
 const app = express();
 const port = 3000;
@@ -71,6 +72,24 @@ io.on('connection', (socket) => {
     })
 
     socket.on("moveTaskItem", async (data) => {
+        // console.log(data)
+        let tasks = await getAllItemsOfList(data.id)
+        // console.log(tasks)
+        tasks[data.previousIndex].position = data.currentIndex
+        if (data.currentIndex > data.previousIndex) {
+            for (let i = data.previousIndex + 1; i <= data.currentIndex; i++) {
+                tasks[i].position -= 1
+            }
+        }
+        else {
+            for (let i = data.currentIndex; i < data.previousIndex; i++) {
+                tasks[i].position += 1
+            }
+        }
+        // console.log(tasks)
+        tasks.forEach(task => {
+            updateListItem(task.id, task.completed_by, task.position, task.name)
+        });
         io.to(data.id).emit("moveTaskItem", data)
     })
 
