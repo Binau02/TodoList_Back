@@ -54,6 +54,24 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     console.log(`New connection. Socket id : ${socket.id}`);
+
+    socket.on("enterList", async (listId) => {
+        for (const room of socket.rooms) {
+            if (room !== socket.id) {
+                socket.leave(room);
+            }
+        }
+        socket.join(listId)
+    })
+
+    socket.on("moveTaskItem", async (data) => {
+        io.to(data.id).emit("moveTaskItem", data)
+    })
+
+    socket.on("checked", async (data) => {
+        console.log("checked received")
+        io.to(data.id).emit("checked", data)
+    })
 });
 
 // server start
