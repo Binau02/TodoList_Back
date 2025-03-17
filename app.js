@@ -75,7 +75,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on("checked", async (data) => {
-        console.log(data)
         io.to(data.id).emit("checked", data)
     })
 });
