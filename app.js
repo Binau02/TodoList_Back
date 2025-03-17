@@ -71,7 +71,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on("moveTaskItem", async (data) => {
-        tasks = getAllItemsOfList()
         io.to(data.id).emit("moveTaskItem", data)
     })
 
