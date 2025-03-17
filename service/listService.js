@@ -121,9 +121,32 @@ async function grantAccessToList(email, listId) {
     });
 }
 
+
+/**
+ * Update a list.
+ *
+ * @param list_id the list id
+ * @param name new name of the list
+ */
+async function updateList(list_id, name) {
+    return new Promise((resolve, reject) => {
+        db.run("UPDATE list SET (name) = (?) WHERE id = ?", [name, list_id], function (err) {
+            if (err) {
+                console.error("Error updating list:", err.message);
+                reject(err);
+                return;
+            }
+            console.log("list updated successfully!");
+
+            resolve();
+        });
+    });
+}
+
 module.exports = {
     getAllListsOfUser,
     createList,
     grantAccessToList,
-    getListById
+    getListById,
+    updateList,
 }; 

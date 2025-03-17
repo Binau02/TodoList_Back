@@ -68,9 +68,28 @@ async function grantAccessToList(req, res) {
 }
 
 
+async function updateList(req, res) {
+    try {
+        const {list_id, name} = req.body;
+
+        if (!list_id || !name) {
+            return res.status(400).json({error: 'Bad request'});
+        }
+
+        await listService.updateList(list_id, name);
+
+        res.status(201).json(true);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
 module.exports = {
     getAllListsOfUser,
     createList,
     grantAccessToList,
+    updateList,
 };
 
