@@ -83,6 +83,29 @@ async function grantAccessToList(req, res) {
     }
 }
 
+/**
+ * Revoke access to a list. Send http status `201` if list creation is successful, `400`on bad request or `500` on internal server error.
+ *
+ * @param req
+ * @param res
+ */
+async function revokeAccessToList(req, res) {
+    try {
+        const {list_id, email} = req.body;
+
+        if (!list_id || !email) {
+            return res.status(400).json({error: 'Bad request'});
+        }
+
+        await listService.revokeAccessToList(email, list_id);
+
+        res.status(201).json(true);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
 
 async function updateList(req, res) {
     try {
@@ -107,6 +130,7 @@ module.exports = {
     getAllUsersOfList,
     createList,
     grantAccessToList,
+    revokeAccessToList,
     updateList,
 };
 

@@ -149,6 +149,32 @@ async function grantAccessToList(email, listId) {
 
 
 /**
+ * Revoke access to list.
+ *
+ * @param email user email
+ * @param listId list id
+ */
+async function revokeAccessToList(email, listId) {
+    return new Promise((resolve, reject) => {
+        db.run(`
+            DELETE
+            FROM has_access
+            WHERE user_email = ?
+              AND todo_list_id = ?
+        `, [email, listId], (err) => {
+            if (err) {
+                console.error("Error revoking has_access:", err.message);
+                reject(err);
+                return;
+            }
+            console.log("has_access removed successfully!");
+            resolve();
+        })
+    });
+}
+
+
+/**
  * Update a list.
  *
  * @param list_id the list id
@@ -173,6 +199,7 @@ module.exports = {
     getAllListsOfUser,
     createList,
     grantAccessToList,
+    revokeAccessToList,
     getListById,
     updateList,
     getAllUsersOfList,
