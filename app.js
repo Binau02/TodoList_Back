@@ -60,6 +60,36 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     console.log(`New connection. Socket id : ${socket.id}`);
+
+    socket.on("enterList", async (listId) => {
+        for (const room of socket.rooms) {
+            if (room !== socket.id) {
+                socket.leave(room);
+            }
+        }
+        socket.join(listId)
+    })
+
+    socket.on("moveTaskItem", async (data) => {
+        tasks = getAllItemsOfList()
+        io.to(data.id).emit("moveTaskItem", data)
+    })
+
+    socket.on("checked", async (data) => {
+        io.to(data.id).emit("checked", data)
+    })
+    
+    socket.on("grantAccess", async (data) => {
+        // send to access granted user
+    })
+
+    socket.on("removeAccess", async (data) => {
+        // send to access removed user
+    })
+
+    socket.on("addTask", async (data) => {
+        io.to(data.id).emit("addTask", data)
+    })
 });
 
 // server start

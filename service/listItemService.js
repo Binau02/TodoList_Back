@@ -12,6 +12,7 @@ function getAllItemsOfList(listId) {
             SELECT *
             FROM list_item l
             WHERE l.list_id = ?
+            ORDER BY position
         `, [listId], (err, rows) => {
             if (err) {
                 console.error("Error fetching list items:", err.message);
