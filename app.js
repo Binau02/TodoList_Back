@@ -72,9 +72,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on("moveTaskItem", async (data) => {
-        // console.log(data)
         let tasks = await getAllItemsOfList(data.id)
-        // console.log(tasks)
         tasks[data.previousIndex].position = data.currentIndex
         if (data.currentIndex > data.previousIndex) {
             for (let i = data.previousIndex + 1; i <= data.currentIndex; i++) {
@@ -86,7 +84,6 @@ io.on('connection', (socket) => {
                 tasks[i].position += 1
             }
         }
-        // console.log(tasks)
         tasks.forEach(task => {
             updateListItem(task.id, task.completed_by, task.position, task.name)
         });
@@ -98,11 +95,11 @@ io.on('connection', (socket) => {
     })
     
     socket.on("grantAccess", async (data) => {
-        // send to access granted user
+        io.emit("grantAccess", data)
     })
 
-    socket.on("removeAccess", async (data) => {
-        // send to access removed user
+    socket.on("revokeAccess", async (data) => {
+        io.emit("revokeAccess", data)
     })
 
     socket.on("addTask", async (data) => {
