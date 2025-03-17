@@ -28,6 +28,30 @@ function getAllListsOfUser(email) {
     });
 }
 
+/**
+ * Get a list by its id.
+ *
+ * @param list_id the list id
+ * @returns the list
+ */
+function getListById(list_id) {
+    return new Promise((resolve, reject) => {
+        db.all(`
+            SELECT *
+            FROM todo_list
+            WHERE id = ?
+        `, [list_id], (err, rows) => {
+            if (err) {
+                console.error("Error fetching list:", err.message);
+                reject(err);
+            } else {
+                console.log("getListById executed successfully.", rows);
+                resolve(rows[0] ?? undefined);
+            }
+        });
+    });
+}
+
 
 /**
  * Create a list in the database.
@@ -101,4 +125,5 @@ module.exports = {
     getAllListsOfUser,
     createList,
     grantAccessToList,
+    getListById
 }; 
