@@ -17,6 +17,22 @@ async function getAllListsOfUser(req, res) {
 }
 
 /**
+ * Get all users that have access to list. Send http status `200` if request is successful or `500` on internal server error.
+ *
+ * @param req
+ * @param res
+ * @returns all users that have access to list
+ */
+async function getAllUsersOfList(req, res) {
+    try {
+        const users = await listService.getAllUsersOfList(req.params.list_id);
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({error: 'Failed to retrieve users'});
+    }
+}
+
+/**
  * Create a list. Send http status `201` if list creation is successful, `400`on bad request or `500` on internal server error.
  *
  * @param req
@@ -88,6 +104,7 @@ async function updateList(req, res) {
 
 module.exports = {
     getAllListsOfUser,
+    getAllUsersOfList,
     createList,
     grantAccessToList,
     updateList,
