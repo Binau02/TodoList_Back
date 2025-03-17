@@ -67,8 +67,24 @@ async function logout(req, res) {
     }
 }
 
+/**
+ * Return true if a user is logged in, false otherwise. Send http status `200` if request is successful or `500` on
+ * internal server error.
+ *
+ * @param req
+ * @param res
+ */
+function isLoggedIn(req, res) {
+    try {
+        res.status(200).json({isLoggedIn: !!req.userEmail});
+    } catch (error) {
+        res.status(500).json({error: 'IsLoggedIn failed'});
+    }
+}
+
 module.exports = {
     register,
     login,
-    logout
+    logout,
+    isLoggedIn,
 };
