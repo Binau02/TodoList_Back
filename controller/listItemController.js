@@ -1,4 +1,5 @@
 const listItemService = require("../service/listItemService");
+const listService = require("../service/listService");
 
 /**
  * Get all items of a list. Send http status `200` if request is successful or `500` on internal server error.
@@ -19,6 +20,28 @@ async function getAllItemsOfList(req, res) {
         res.status(200).json(list_items);
     } catch (error) {
         res.status(500).json({error: 'Failed to retrieve list items'});
+    }
+}
+
+/**
+ * Get a list by its id. Send http status `200` if request is successful or `500` on internal server error.
+ *
+ * @param req
+ * @param res
+ * @returns all items of tje list on success
+ */
+async function getListById(req, res) {
+    try {
+        const {list_id} = req.params;
+
+        if (!list_id) {
+            return res.status(400).json({error: "Missing list_id parameter"});
+        }
+
+        const list_items = await listService.getListById(list_id);
+        res.status(200).json(list_items);
+    } catch (error) {
+        res.status(500).json({error: 'Failed to retrieve list'});
     }
 }
 
@@ -78,6 +101,7 @@ async function updateListItem(req, res) {
 module.exports = {
     getAllItemsOfList,
     createListItem,
-    updateListItem
+    updateListItem,
+    getListById
 };
 

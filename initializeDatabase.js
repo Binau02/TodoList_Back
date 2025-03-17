@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3');
-const dbName = './data/todo.db';
+const dbName = './todo.db';
 
 let db = new sqlite3.Database(dbName, sqlite3.OPEN_READWRITE, (err) => {
     if (err && err.code === "SQLITE_CANTOPEN") {
